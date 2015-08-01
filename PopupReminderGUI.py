@@ -5,7 +5,8 @@ import tkMessageBox as box
 from Tkinter import *
 
 reminderFilePath = ("/Users/Callum/Desktop/Scripts/Test/Reminders.txt")
-class Example(Frame):
+
+class PopupGUI(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
         self.parent = parent
@@ -17,6 +18,7 @@ class Example(Frame):
         show = Button(self, text = "Show reminders", command = self.onShow).grid(row = 3, column = 0)
         self.EntRemind = Entry(self, textvariable = self.VarEntRemind).grid(row = 0, column = 1)
         label = Label(self, text = "Please enter reminder:").grid(row = 0)
+
     def onShow(self):
         self.createWindow()
 
@@ -27,13 +29,6 @@ class Example(Frame):
         with open(reminderFilePath, 'a') as fout:
             fout.write(U + "\n")
             fout.close()
-        self.clear_text()
-
-    def clear_text(self):
-        self.EntRemind.delete(0, 'end')
-
-    def clear():
-        text.delete("1.0", END)
 
     def createWindow(self):
         win = Toplevel(self)
@@ -46,7 +41,7 @@ class Example(Frame):
  
 def main():
     master = Tk()
-    ex = Example(master)
+    ex = PopupGUI(master)
     master.mainloop()
 if __name__ == '__main__':
     main()
