@@ -1,10 +1,11 @@
 #!/usr/bin/env python
+import os
 from ttk import Frame, Button, Style
 from Tkinter import Tk, BOTH
 import tkMessageBox as box
 from Tkinter import *
 
-reminderFilePath = ("/Users/Callum/Desktop/Scripts/Test/Reminders.txt")
+reminderFilePath = os.path.expanduser("~/.Reminder.txt")
 
 class PopupGUI(Frame):
     def __init__(self, parent):
