@@ -15,13 +15,20 @@ class PopupGUI(Frame):
         self.VarEntRemind = StringVar()
         self.parent.title("Reminders")
         self.pack()
-        add = Button(self, text = "Add reminder", command = self.send).grid(row = 3, column = 1)
-        show = Button(self, text = "Show reminders", command = self.onShow).grid(row = 3, column = 0)
-        self.EntRemind = Entry(self, textvariable = self.VarEntRemind).grid(row = 0, column = 1)
-        label = Label(self, text = "Please enter reminder:").grid(row = 0)
-
+        add = Button(self, text = "Add reminder", command = self.send)#.grid(row = 3, column = 1)
+        show = Button(self, text = "Show reminders", command = self.onShow)#.grid(row = 3, column = 0)
+        self.EntRemind = Entry(self, textvariable = self.VarEntRemind)#.grid(row = 0, column = 1)
+        label = Label(self, text = "Please enter reminder:")#.grid(row = 0)
+	add.grid(row = 3, column = 1)
+	show.grid(row = 3, column = 0)
+	self.EntRemind.grid(row = 0, column = 1)
+	label.grid(row = 0, column = 0)
+	
     def onShow(self):
         self.createWindow()
+       
+    def clearText(self):
+      self.EntRemind.delete(0, END)
 
     def send(self):
         box.showinfo("Information", "Reminder added to file")
@@ -30,6 +37,7 @@ class PopupGUI(Frame):
         with open(reminderFilePath, 'a') as fout:
             fout.write(U + "\n")
             fout.close()
+	self.clearText()
 
     def createWindow(self):
         win = Toplevel(self)
@@ -42,7 +50,7 @@ class PopupGUI(Frame):
  
 def main():
     master = Tk()
-    ex = PopupGUI(master)
+    PopupGUI(master).pack(expand=True, fill = 'both')
     master.mainloop()
 if __name__ == '__main__':
     main()
