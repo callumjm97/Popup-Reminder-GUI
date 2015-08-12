@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os
+import os, time
 from ttk import Frame, Button, Style
 from Tkinter import Tk, BOTH
 import tkMessageBox as box
@@ -15,20 +15,69 @@ class PopupGUI(Frame):
         self.VarEntRemind = StringVar()
         self.parent.title("Reminders")
         self.pack()
-        add = Button(self, text = "Add reminder", command = self.send)#.grid(row = 3, column = 1)
-        show = Button(self, text = "Show reminders", command = self.onShow)#.grid(row = 3, column = 0)
-        self.EntRemind = Entry(self, textvariable = self.VarEntRemind)#.grid(row = 0, column = 1)
-        label = Label(self, text = "Please enter reminder:")#.grid(row = 0)
-	add.grid(row = 3, column = 1)
-	show.grid(row = 3, column = 0)
-	self.EntRemind.grid(row = 0, column = 1)
-	label.grid(row = 0, column = 0)
-	
+        add = Button(self, text = "Add reminder", command = self.send)
+        deleteIt = Button(self, text = "Delete all reminders", command = self.createConfirmWin)
+        close = Button(self, text = "Quit", command = self.onQuit)
+        show = Button(self, text = "Show reminders", command = self.onShow)
+        self.EntRemind = Entry(self, textvariable = self.VarEntRemind)
+        label = Label(self, text = "Please enter reminder:")
+        sleep = Button(self, text = "Sleep", command = self.createSleepWin)
+        add.grid(row = 1, column = 1)
+        show.grid(row = 1, column = 0)
+        self.EntRemind.grid(row = 0, column = 1)
+        label.grid(row = 0)
+        deleteIt.grid(row = 0, column = 2)
+        close.grid(row = 1, column = 2)
+        sleep.grid(row = 2, column = 1)
+
+
+    def createConfirmWin(self):
+        newWin = Toplevel(self)
+        agree = Button(newWin, text = "Yes", command = self.onDelete)
+        deny = Button(newWin, text = "No", command = newWin.destroy())
+
+    def createSleepWin(self):
+        newWin = Toplevel(self)
+        newWin.title("Sleep time")
+        self.sleepSlider = Scale(newWin,length = 300, orient = 'horizontal', from_=0, to_=120)
+        sleepLabel = Label(newWin, text = "Set when you want to be reminded again(seconds):")
+        sleepButton2 = Button(newWin, text = "Sleep now!", command = self.onSleep)
+        sleepLabel.grid(row = 0, column = 0)
+        self.sleepSlider.grid(row = 1, column = 0)
+        sleepButton2.grid(row = 1, column = 1)
+        
+
+    def onSleep(self):
+        U = self.sleepSlider.get()
+        if os.path.exists:
+            time.sleep(U)
+            self.onShow()
+            print("I slept!")
+
+
+    def clear(self):
+        self.EntRemind.delete(0, END)
+
     def onShow(self):
-        self.createWindow()
-       
-    def clearText(self):
-      self.EntRemind.delete(0, END)
+        if os.path.exists(reminderFilePath):
+            self.createWindow()
+            self.clear()
+        else:
+            print("The file doesn't exist!")
+            box.showinfo("Information", "The file either doesnt exist or can't be found, plese enter a new reminder to create a file.")
+
+            
+    def onQuit(self):
+        quit()
+    
+    def onDelete(self):
+        self.clear()
+        if os.path.exists(reminderFilePath):
+            box.showinfo("Information", "All reminders have been deleted")
+            os.remove(reminderFilePath)
+        else:
+            print("Can't delete file as it doesn't exist!")
+            box.showinfo("Information", "The file can't be deleted as it doesn't exist")
 
     def send(self):
         box.showinfo("Information", "Reminder added to file")
@@ -37,7 +86,7 @@ class PopupGUI(Frame):
         with open(reminderFilePath, 'a') as fout:
             fout.write(U + "\n")
             fout.close()
-	self.clearText()
+        self.clear()
 
     def createWindow(self):
         win = Toplevel(self)
@@ -50,7 +99,8 @@ class PopupGUI(Frame):
  
 def main():
     master = Tk()
-    PopupGUI(master).pack(expand=True, fill = 'both')
+    ex = PopupGUI(master)
     master.mainloop()
 if __name__ == '__main__':
     main()
+
