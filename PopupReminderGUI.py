@@ -34,17 +34,23 @@ class PopupGUI(Frame):
     def createConfirmWin(self):
         newWin = Toplevel(self)
         agree = Button(newWin, text = "Yes", command = self.onDelete)
-        deny = Button(newWin, text = "No", command = newWin.destroy())
-
+        deny = Button(newWin, text = "No", command = lambda: newWin.destroy())
+        label = Label(newWin, text = "Are you sure you want to delete all reminders?")
+        label.grid(row = 0, column = 0)
+        agree.grid(row = 0, column = 1)
+        deny.grid(row = 0, column = 2)
+        
     def createSleepWin(self):
         newWin = Toplevel(self)
         newWin.title("Sleep time")
         self.sleepSlider = Scale(newWin,length = 300, orient = 'horizontal', from_=0, to_=120)
         sleepLabel = Label(newWin, text = "Set when you want to be reminded again(seconds):")
         sleepButton2 = Button(newWin, text = "Sleep now!", command = self.onSleep)
+        closeWin = Button(newWin, text = "Close", command = lambda: newWin.destroy())
+        closeWin.grid(row = 2, column = 0)
         sleepLabel.grid(row = 0, column = 0)
         self.sleepSlider.grid(row = 1, column = 0)
-        sleepButton2.grid(row = 1, column = 1)
+        sleepButton2.grid(row = 0, column = 1)
         
 
     def onSleep(self):
